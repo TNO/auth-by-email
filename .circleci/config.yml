@@ -1,51 +1,51 @@
 version: 2.1
-  jobs:
-    test:
-      docker: 
-        - image: circleci/golang:buster
-      branches:
-        only:
-          - master
-      steps:
-        - checkout
-        - run:
-            name: Running tests
-            command: |
-              cd $CIRCLE_WORKING_DIRECTORY/auth-by-email
-              go test -v -coverprofile=coverage.out
-              go tool cover -html=coverage.out -o $CIRCLE_WORKING_DIRECTORY/coverage.html
-        - store_artifacts:
-            path: $CIRCLE_WORKING_DIRECTORY/coverage.html
-    build:
-      docker: 
-        - image: circleci/golang:buster
-      branches:
-        only:
-          - master
-      steps:
-        - checkout
-        - run:
-            name: Compiling caddy
-            command: |
-              cd $CIRCLE_WORKING_DIRECTORY/caddy
-              go build
-              $CIRCLE_WORKING_DIRECTORY/caddy/caddy -plugins | grep authbyemail
-        - run:
-            name: Compiling usermod
-            command: |
-              cd $CIRCLE_WORKING_DIRECTORY/usermod
-              go build
-        - run:
-            name: Compiling migrate
-            command: |
-              cd $CIRCLE_WORKING_DIRECTORY/migrate
-              go build
-        - store_artifacts:
-            path: $CIRCLE_WORKING_DIRECTORY/caddy/caddy
-            destination: caddy
-        - store_artifacts:
-            path: $CIRCLE_WORKING_DIRECTORY/usermod/usermod
-            destination: usermod
-        - store_artifacts:
-            path: $CIRCLE_WORKING_DIRECTORY/migrate/migrate
-            destination: migrate
+jobs:
+  test:
+    docker: 
+      - image: circleci/golang:buster
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: Running tests
+          command: |
+            cd $CIRCLE_WORKING_DIRECTORY/auth-by-email
+            go test -v -coverprofile=coverage.out
+            go tool cover -html=coverage.out -o $CIRCLE_WORKING_DIRECTORY/coverage.html
+      - store_artifacts:
+          path: $CIRCLE_WORKING_DIRECTORY/coverage.html
+  build:
+    docker: 
+      - image: circleci/golang:buster
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: Compiling caddy
+          command: |
+            cd $CIRCLE_WORKING_DIRECTORY/caddy
+            go build
+            $CIRCLE_WORKING_DIRECTORY/caddy/caddy -plugins | grep authbyemail
+      - run:
+          name: Compiling usermod
+          command: |
+            cd $CIRCLE_WORKING_DIRECTORY/usermod
+            go build
+      - run:
+          name: Compiling migrate
+          command: |
+            cd $CIRCLE_WORKING_DIRECTORY/migrate
+            go build
+      - store_artifacts:
+          path: $CIRCLE_WORKING_DIRECTORY/caddy/caddy
+          destination: caddy
+      - store_artifacts:
+          path: $CIRCLE_WORKING_DIRECTORY/usermod/usermod
+          destination: usermod
+      - store_artifacts:
+          path: $CIRCLE_WORKING_DIRECTORY/migrate/migrate
+          destination: migrate
