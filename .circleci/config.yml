@@ -1,11 +1,9 @@
 version: 2.1
+
 jobs:
   test:
     docker: 
       - image: circleci/golang:buster
-    branches:
-      only:
-        - master
     steps:
       - checkout
       - run:
@@ -19,9 +17,6 @@ jobs:
   build:
     docker: 
       - image: circleci/golang:buster
-    branches:
-      only:
-        - master
     steps:
       - checkout
       - run:
@@ -49,3 +44,20 @@ jobs:
       - store_artifacts:
           path: $CIRCLE_WORKING_DIRECTORY/migrate/migrate
           destination: migrate
+
+workflows:
+  version: 2
+  test-build:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only:
+                - master
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
