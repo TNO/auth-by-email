@@ -9,11 +9,11 @@ jobs:
       - run:
           name: Running tests
           command: |
-            cd $CIRCLE_WORKING_DIRECTORY/auth-by-email
+            cd ~/project/auth-by-email
             go test -v -coverprofile=coverage.out
-            go tool cover -html=coverage.out -o $CIRCLE_WORKING_DIRECTORY/coverage.html
+            go tool cover -html=coverage.out -o ~/project/coverage.html
       - store_artifacts:
-          path: $CIRCLE_WORKING_DIRECTORY/coverage.html
+          path: ~/project/coverage.html
   build:
     docker: 
       - image: circleci/golang:buster
@@ -22,27 +22,27 @@ jobs:
       - run:
           name: Compiling caddy
           command: |
-            cd $CIRCLE_WORKING_DIRECTORY/caddy
+            cd ~/project/caddy
             go build
-            $CIRCLE_WORKING_DIRECTORY/caddy/caddy -plugins | grep authbyemail
+            ~/project/caddy/caddy -plugins | grep authbyemail
       - run:
           name: Compiling usermod
           command: |
-            cd $CIRCLE_WORKING_DIRECTORY/usermod
+            cd ~/project/usermod
             go build
       - run:
           name: Compiling migrate
           command: |
-            cd $CIRCLE_WORKING_DIRECTORY/migrate
+            cd ~/project/migrate
             go build
       - store_artifacts:
-          path: $CIRCLE_WORKING_DIRECTORY/caddy/caddy
+          path: ~/project/caddy/caddy
           destination: caddy
       - store_artifacts:
-          path: $CIRCLE_WORKING_DIRECTORY/usermod/usermod
+          path: ~/project/usermod/usermod
           destination: usermod
       - store_artifacts:
-          path: $CIRCLE_WORKING_DIRECTORY/migrate/migrate
+          path: ~/project/migrate/migrate
           destination: migrate
 
 workflows:
