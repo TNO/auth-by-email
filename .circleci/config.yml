@@ -16,7 +16,7 @@ jobs:
           command: |
             cd ~/project/auth-by-email
             go test -v -coverprofile=coverage.out 2>&1 | go-junit-report > ~/project/test-results/auth-by-email/report.xml
-            go tool cover -html=~/project/auth-by-email/coverage.out -o ~/project/coverage.html
+            go tool cover -html=coverage.out -o ~/project/coverage.html
       - store_artifacts:
           path: ~/project/coverage.html
       - store_test_results:
