@@ -1,7 +1,9 @@
 # Authentication by e-mail
 
-The goal of this project is to provide a web server module for Caddy that allows authenticated access to a website based on e-mail only.
-That is, no account or password should be necessary for access.
+[![CircleCI](https://circleci.com/gh/TNO/auth-by-email/tree/master.svg?style=shield)](https://circleci.com/gh/TNO/auth-by-email/tree/master)
+
+Auth-by-Email is a web server module for Caddy that allows authenticated access to a website based on e-mail only.
+No more accounts or passwords!
 
 ## How does that work?
 
