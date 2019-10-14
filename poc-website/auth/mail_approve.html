@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <p>Hi {{.Admin}},</p>
+        <p>A new user, {{.User}}, requested permission to log in to {{.SiteName}}. Please click the following link to approve or reject this request:<br />
+        {{.Link}}</p>
+        <p>You may also use this link at any time to revoke this user's access to {{.SiteName}}.</p>
+        <p>Kind regards,</p>
+        <p>{{.SiteName}} administration</p>
+    </body>
+</html>

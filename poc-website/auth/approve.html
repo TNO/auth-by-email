@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ACME Website</title>
+</head>
+<body>
+    <p>Hi administrator,</p>
+    <p>Would you like to allow {{.User}} to access ACME?</p>
+    <form method="post" action="/auth/approve">
+    <p>
+        <input type="hidden" name="email" value="{{.EncEmail}}" />
+        <input type="radio" name="action" value="approve" id="action-approve" />
+            <label for="action-approve">Yes, approve</label> <br />
+        <input type="radio" name="action" value="revoke"  id="action-revoke" />
+            <label for="action-approve">No, revoke</label> <br />
+        <input type="submit" value="Submit" />
+    </p>
+    </form>
+    <p>You can always revisit this page from your e-mail to change your decision.</p>
+</body>
+</html>
+

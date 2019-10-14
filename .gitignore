@@ -1,0 +1,3 @@
+poc-website/*
+!poc-website/Caddyfile
+!poc-website/auth
