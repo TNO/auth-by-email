@@ -164,6 +164,13 @@ const PAGEDATA_APPROVE = `<!DOCTYPE html>
 <body>
 	<p>Hi administrator,</p>
 	<p>Would you like to allow {{.User}} to access this website?</p>
+	{{if .Exists}}
+	<p style="font-weight: bold;">
+		This user is currently approved. Approving them again will resend the log-in link.
+	</p>
+	{{else}}
+	<p>This user does not exist in the database.</p>
+	{{end}}
 	<form method="post" action="/auth/approve">
 	<p>
 		<input type="hidden" name="email" value="{{.EncEmail}}" />

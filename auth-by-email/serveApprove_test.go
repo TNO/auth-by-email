@@ -1,6 +1,7 @@
 package authbyemail
 
 import (
+    "io/ioutil"
     "net/http"
     "net/http/httptest"
     "net/url"
@@ -34,6 +35,37 @@ func TestServeHTTPApprove(t *testing.T) {
         t.Run("Malformed request (bad encryption)", func(t *testing.T) {
             test(t, 400, httptest.NewRequest("GET", "http://example.com/auth/approve?"+url.Values{"email": {"problem"}, "submit": {"Get"}}.Encode(), nil))
         })
+    })
+
+    // GET request, but we assume it works and search for text
+    testString := func(t *testing.T, textToFind string, req *http.Request) {
+        w := httptest.NewRecorder()
+        statusCode, _ := h.ServeHTTP(w, req)
+        if statusCode != 0 || w.Result().StatusCode != 200 {
+            t.Errorf("Status code should be 200 but was %v. %#v", w.Result().StatusCode, w.Result())
+        }
+        responseBytes, _ := ioutil.ReadAll(w.Result().Body) // If error, we won't find the text anyway
+        if !strings.Contains(string(responseBytes), textToFind) {
+            t.Errorf("Did not find \n%v\n in the following response: \n%v\n", textToFind, string(responseBytes))
+        }
+    }
+
+    t.Run("Confirmation form correctly identifies existing users", func(t *testing.T) {
+        t.Run("New user should not exist", func(t *testing.T) {
+            testString(t, "This user does not exist in the database.",
+                httptest.NewRequest("GET", "http://example.com/auth/approve?"+url.Values{"email": {CRYPTO.encrypt("test@example.com")}, "submit": {"Get"}}.Encode(), nil))
+        })
+
+        // Add the user and try again
+        email, _ := NewEmailAddrFromString("test@example.com")
+        userID := CRYPTO.UserIDfromEmail(email)
+        h.database.AddUser(userID)
+
+        t.Run("Existing user should exist", func(t *testing.T) {
+            testString(t, "This user is currently approved. Approving them again will resend the log-in link.",
+                httptest.NewRequest("GET", "http://example.com/auth/approve?"+url.Values{"email": {CRYPTO.encrypt("test@example.com")}, "submit": {"Get"}}.Encode(), nil))
+        })
+        h.database.DelUser(userID)
     })
 
     // Standard POST request

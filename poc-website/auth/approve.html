@@ -5,7 +5,7 @@
 </head>
 <body>
     <p>Hi administrator,</p>
-    <p>Would you like to allow {{.User}} to access ACME?</p>
+    <p>Would you like to allow {{if .Exists}}EXISTING USER{{end}} {{.User}} to access ACME?</p>
     <form method="post" action="/auth/approve">
     <p>
         <input type="hidden" name="email" value="{{.EncEmail}}" />
