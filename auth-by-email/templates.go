@@ -171,6 +171,11 @@ const PAGEDATA_APPROVE = `<!DOCTYPE html>
 	{{else}}
 	<p>This user does not exist in the database.</p>
 	{{end}}
+	{{if .SafeAddress}}{{else}}
+	<p style="font-weight: bold;">
+		This e-mail address contains non-ascii characters. Be aware of <a href="https://en.wikipedia.org/wiki/IDN_homograph_attack">homograph attacks</a>.
+	</p>
+	{{end}}
 	<form method="post" action="/auth/approve">
 	<p>
 		<input type="hidden" name="email" value="{{.EncEmail}}" />

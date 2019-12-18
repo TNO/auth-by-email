@@ -68,6 +68,18 @@ func TestServeHTTPApprove(t *testing.T) {
         h.database.DelUser(userID)
     })
 
+    t.Run("Confirmation form correctly handles non-ASCII addresses", func(t *testing.T) {
+        t.Run("Non-ASCII domain should be punycoded", func(t *testing.T) {
+            testString(t, "xn--example-tfb.com",
+                httptest.NewRequest("GET", "http://example.com/auth/approve?"+url.Values{"email": {CRYPTO.encrypt("test@exaımple.com")}, "submit": {"Get"}}.Encode(), nil))
+        })
+
+        t.Run("Non-ASCII local part should give a warning", func(t *testing.T) {
+            testString(t, "This e-mail address contains non-ascii characters.",
+                httptest.NewRequest("GET", "http://example.com/auth/approve?"+url.Values{"email": {CRYPTO.encrypt("teıst@example.com")}, "submit": {"Get"}}.Encode(), nil))
+        })
+    })
+
     // Standard POST request
     test = func(t *testing.T, desiredStatus int, req *http.Request) {
         req.Header.Add("Content-Type", "application/x-www-form-urlencoded")

@@ -41,11 +41,12 @@ func (h AuthByEmailHandler) serveApproveByAskingConfirmation(w http.ResponseWrit
     // Collect data for the approval template
     data := struct {
         User, EncEmail string
-        Exists         bool
+        Exists, SafeAddress         bool
     }{
         User:     email.String(),
         EncEmail: r.Form["email"][0],
         Exists:   h.database.IsKnownUser(CRYPTO.UserIDfromEmail(email)),
+        SafeAddress: email.LocalPartIsASCII(),
     }
 
     return h.serveTemplate(w, TplApprove, &data)
