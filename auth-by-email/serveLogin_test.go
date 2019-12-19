@@ -10,6 +10,7 @@ import (
 func TestServeHTTPLogin(t *testing.T) {
     h := NewTestHandler()
     h.database.AddUser(CRYPTO.UserIDfromEmail(h.config.MailerFrom))
+	h.config.WhitelistDomains = []string{"example.it"}
 
     t.Run("Correct request (new user)", func(t *testing.T) {
         req := httptest.NewRequest("POST", "http://example.com/auth/login",
@@ -44,6 +45,25 @@ func TestServeHTTPLogin(t *testing.T) {
         if GetResponseCookie(w.Result()) == nil {
             t.Error("Request of auth/login with known addr should get a cookie but got nothing")
         }
+	t.Run("Correct request (new user, whitelisted domain)", func(t *testing.T) {
+		req := httptest.NewRequest("POST", "http://example.com/auth/login",
+			strings.NewReader(url.Values{"email": {"test@example.it"}, "submit": {"Get"}}.Encode()))
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+		w := httptest.NewRecorder()
+		statusCode, _ := h.ServeHTTP(w, req)
+		if statusCode != 0 || w.Result().StatusCode != 303 {
+			t.Errorf("Request of auth/login with whitelisted addr should be See Other but was %v. %#v", w.Result().StatusCode, w.Result())
+		}
+		if h.mailer.(*MockMailer).mail != "login" {
+			t.Error("No login mail sent when trying to log in with whitelisted address")
+		}
+		if GetResponseCookie(w.Result()) == nil {
+			t.Error("Request of auth/login with whitelisted addr should get a cookie but got nothing")
+		}
+		if email, _ := NewEmailAddrFromString("test@example.it"); !h.database.IsKnownUser(CRYPTO.UserIDfromEmail(email)) {
+			t.Error("User not added after automatic approval")
+		}
+	})
 
     })
 

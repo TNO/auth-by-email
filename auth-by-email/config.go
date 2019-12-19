@@ -20,6 +20,7 @@ type Config struct {
     SiteName         string
     SiteURL          string
     MailerFrom       *EmailAddr
+	WhitelistDomains []string
 }
 
 // newConfig returns a Config with default values. Mandatory parameters may
@@ -135,6 +136,12 @@ func NewConfigFromCaddy(c *caddy.Controller) (*Config, error) {
     }
 
     return config, nil
+
+		case "whitelistdomains":
+			if len(args) == 0 {
+				return nil, c.Err("No domain names given after `whitelistdomains` keyword. Please give at least one")
+			}
+			config.WhitelistDomains = args
 }
 
 // The helper function adminEmailFromUserEmail returns the admin belonging
@@ -150,4 +157,13 @@ func (c *Config) adminEmailFromUserEmail(e *EmailAddr) *EmailAddr {
         }
     }
     return nil
+// The helper function IsDomainWhitelisted checks whether the given domain
+// is whitelisted by checking all members of WhitelistDomains
+func (c *Config) IsDomainWhitelisted(domain string) bool {
+	for _, whitelisted_domain := range c.WhitelistDomains {
+		if whitelisted_domain == domain {
+			return true
+		}
+	}
+	return false
 }
