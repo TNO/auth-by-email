@@ -5,29 +5,29 @@
 package authbyemail
 
 import (
-    "github.com/mholt/caddy"
-    "github.com/mholt/caddy/caddyhttp/httpserver"
+	"github.com/mholt/caddy"
+	"github.com/mholt/caddy/caddyhttp/httpserver"
 )
 
 // init is called at Caddy's startup, and registers our plugin
 func init() {
-    caddy.RegisterPlugin("authbyemail", caddy.Plugin{
-        ServerType: "http",
-        Action:     setup,
-    })
+	caddy.RegisterPlugin("authbyemail", caddy.Plugin{
+		ServerType: "http",
+		Action:     setup,
+	})
 }
 
 // setup initialises our plugin. This entails parsing our block in the
 // Caddyfile, and then registering our handler as "http middleware".
 func setup(c *caddy.Controller) error {
-    config, err := NewConfigFromCaddy(c)
-    if err != nil {
-        return err
-    }
+	config, err := NewConfigFromCaddy(c)
+	if err != nil {
+		return err
+	}
 
-    httpserver.GetConfig(c).AddMiddleware(func(next httpserver.Handler) httpserver.Handler {
-        return NewHandler(next, config)
-    })
+	httpserver.GetConfig(c).AddMiddleware(func(next httpserver.Handler) httpserver.Handler {
+		return NewHandler(next, config)
+	})
 
-    return nil
+	return nil
 }

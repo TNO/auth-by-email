@@ -1,25 +1,25 @@
 package authbyemail
 
 import (
-    "net/http"
-    "time"
+	"net/http"
+	"time"
 )
 
 // serveLogin is called when a user fills their e-mail address in the landing page.
 // It checks if the user has been approved; if so, it sends them a login link.
 // If not, an admin is asked for approval.
 func (h AuthByEmailHandler) serveLogin(w http.ResponseWriter, r *http.Request) (int, error) {
-    // Parse the form data in the request body
-    r.ParseForm()
+	// Parse the form data in the request body
+	r.ParseForm()
 
-    if len(r.PostForm["email"]) == 0 {
-        return h.serveBadRequest(w)
-    }
+	if len(r.PostForm["email"]) == 0 {
+		return h.serveBadRequest(w)
+	}
 
-    email, err := NewEmailAddrFromString(r.PostForm["email"][0])
-    if err != nil {
-        return h.serveBadRequest(w)
-    }
+	email, err := NewEmailAddrFromString(r.PostForm["email"][0])
+	if err != nil {
+		return h.serveBadRequest(w)
+	}
 
 	userID := CRYPTO.UserIDfromEmail(email)
 

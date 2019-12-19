@@ -23,7 +23,7 @@ func NewEmailAddrFromString(e string) (*EmailAddr, error) {
 	// Split the domain (part after the @) at each dot, and encode each part to punycode
 	punycoded_domain, err := idna.ToASCII(strings.ToLower(e[(i + 1):]))
 	if err != nil {
-		return nil, fmt.Errorf("Error converting e-mail address domain (bytes: %v) to punycode: %v", []byte(strings.ToLower(e[(i + 1):])), err)
+		return nil, fmt.Errorf("Error converting e-mail address domain (bytes: %v) to punycode: %v", []byte(strings.ToLower(e[(i+1):])), err)
 	}
 
 	return &EmailAddr{
