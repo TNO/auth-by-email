@@ -54,6 +54,7 @@ You may supply additional parameters as follows.
 authbyemail {
     sitename My Cool Site
     admin sysadmin@example.com sysadmin@domain.org
+    whitelistdomains example.it
     mailerfrom sysadmin@example.com
     database /var/caddy/database
     unprotected favicon.ico public/*
@@ -67,6 +68,8 @@ authbyemail {
     <dd>Specify the name of the website used in e.g. e-mails. This parameter is mandatory.</dd>
     <dt>admin</dt>
     <dd>Specify one or more e-mail addresses of site administrators. If you specify one, all user approval e-mails will be sent there. If you specify multiple (like in the example above), only the first admin belonging to the user's domain will be sent an approval e-mail, and none will be sent if the user does not belong to any admin's domain (so `sysadmin@domain.org` will be mailed if `lucy@domain.org` wants access, and `fred@acme.com` can not access the site because there is no admin for `acme.com`). If you specify no admins, no users can be approved.</dd>
+    <dt>whitelistdomains</dt>
+    <dd>Specify one or more domains. If you specify any, users from those domains do not need admin approval; if they try to log in for the first time, they will immediately receive a log-in link.</dd>
     <dt>mailerfrom</dt>
     <dd>Specify one e-mail address from which e-mails should be sent. If you use an SMTP service, this will be the address linked to your account. This parameter is mandatory.</dd>
     <dt>database</dt>
