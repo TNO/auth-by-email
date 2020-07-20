@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/mholt/caddy/caddy/caddymain"
-	"github.com/mholt/caddy/caddyhttp/httpserver"
+	"github.com/caddyserver/caddy/caddy/caddymain"
+	"github.com/caddyserver/caddy/caddyhttp/httpserver"
 
 	// plug in plugins here, for example:
 	_ "github.com/TNO/auth-by-email/auth-by-email"

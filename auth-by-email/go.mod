@@ -1,6 +1,6 @@
 module github.com/TNO/auth-by-email/auth-by-email
 
-go 1.12
+go 1.14
 
 require (
 	github.com/caddyserver/caddy v1.0.5
