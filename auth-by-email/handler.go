@@ -1,7 +1,7 @@
 package authbyemail
 
 import (
-	"github.com/mholt/caddy/caddyhttp/httpserver"
+	"github.com/caddyserver/caddy/caddyhttp/httpserver"
 	"log"
 	"net/http"
 	"os"
