@@ -14,8 +14,7 @@ require (
 	github.com/mholt/certmagic v0.11.2 // indirect
 	github.com/miekg/dns v1.1.31 // indirect
 	github.com/onsi/ginkgo v1.14.1 // indirect
-	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
-	golang.org/x/text v0.3.8 // indirect
+	golang.org/x/net v0.7.0
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
 )
